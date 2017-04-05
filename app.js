@@ -9,6 +9,9 @@ const config = process.env.CONFIG_STRING || 'localhost-config'
 database.init(function (err, Order, Stat) {
   if (err) throw err
 
+  app.get('/', function (req, res) {
+    res.send(require('fs').readFileSync('static/hello.html', 'utf-8'))
+  })
   app.get('/order', function (req, res) {
     const cep = req.query.cep
     const productId = req.query.productId
@@ -47,7 +50,7 @@ database.init(function (err, Order, Stat) {
         res.status(200).send()
         console.log(latencies)
 
-        new Stat({
+        if (Math.random() > 0.9) new Stat({
           config     : config,
           created_at : new Date(),
           extra_info : latencies

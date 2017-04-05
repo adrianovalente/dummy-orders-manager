@@ -1,0 +1,39 @@
+<html>
+  <body>
+    <h2>Choose the throughput</h2>
+
+    <input type="text" id="requests"> requests per minute 
+    <input type="submit" onclick="startPerforming()">
+
+    <h3></h3>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script language="javascript">
+    
+
+    var interval;
+    var latencies = []
+
+    function startPerforming() {
+      clearInterval(interval)
+      var time = 60000 / $('#requests').val()
+      interval = setInterval(function () {
+        var startTime = new Date()
+        $.get('/order?cep=08822090&productId=1209840')
+        .then(function (results) {
+          console.log(results)
+          latencies.push(new Date() - startTime)
+
+          var lat = latencies.reduce(function (sum, latency) { return sum + latency }, 0) / latencies.length
+
+          $('h3').html('current latency is ' + Math.floor(lat) + ' ms')
+        })
+
+      }, time)
+
+    }
+    
+  </script>
+  </body>
+
+</html>

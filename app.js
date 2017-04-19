@@ -52,7 +52,7 @@ database.init(function (err, Order, Stat) {
         res.status(200).send()
         console.log(latencies)
 
-        if (Math.random() > 9) new Stat({
+        if (Math.random() > 0.8) new Stat({
           config     : config,
           created_at : new Date(),
           extra_info : latencies

@@ -1,5 +1,6 @@
 const express = require('express')
 const Correios = require('node-correios')
+const sieve = require('sieve')
 const database = require('./database')
 
 const app = express()
@@ -36,14 +37,12 @@ database.init(function (err, Order, Stat) {
 
       // crashable code left here intentionally
       const price = results[0].ValorSemAdicionais
+      startTime = new Date()
+      sieve(1000000)
+      latencies.sieve = new Date() - startTime
 
       startTime = new Date()
-      new Order({
-        product_id  : productId,
-        price       : price,
-        created_at  : new Date(),
-        cep         : cep
-      }).save(function (err) {
+      Order.findOne(function (err) {
         if (err) return res.status(500).send()
         latencies.database = new Date() - startTime
 
@@ -61,7 +60,7 @@ database.init(function (err, Order, Stat) {
 
   })
 
-  app.listen(3000, function () {
+  app.listen(process.env.PORT || 3000, function () {
     console.log('server listening...')
   })
 

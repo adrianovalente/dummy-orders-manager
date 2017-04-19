@@ -43,13 +43,16 @@ database.init(function (err, Order, Stat) {
 
       startTime = new Date()
       Order.findOne(function (err) {
-        if (err) return res.status(500).send()
+        if (err) {
+          return res.status(500).send()
+          console.log(err)
+        }
         latencies.database = new Date() - startTime
 
         res.status(200).send()
         console.log(latencies)
 
-        if (Math.random() > 0.9) new Stat({
+        if (Math.random() > 9) new Stat({
           config     : config,
           created_at : new Date(),
           extra_info : latencies
